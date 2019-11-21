@@ -37,10 +37,31 @@ public class MovesBehaviour : MonoBehaviour
 
             }
         });
+        InvokeRepeating("update_moves", 2f, 2f);
 
 
     }
     // Update is called once per frame
+
+    void update_moves()
+    {
+        RestClient.GetArray<Move>("https://ihc-chess-server.herokuapp.com/list-moves/5dbf88ddb67efa00144cbf3d").Then(response => {
+            var panel1 = GameObject.Find("ContentMoves");
+            if (response.Length > panel1.transform.childCount)
+            {
+                int last_index = response.Length - 1;
+                GameObject newitem = (GameObject)Instantiate(item);
+                var panel = GameObject.Find("ContentMoves");
+                newitem.transform.parent = panel.transform.parent;
+                newitem.GetComponent<RectTransform>().SetParent(panel.transform);
+                newitem.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 200);
+                newitem.GetComponent<RectTransform>().GetComponentInChildren<Text>().text = string.Format(
+                    "{0} // {1}", response[last_index].source_position, response[last_index].target_position);
+            }
+
+
+        });
+    }
     void Update()
     {
         /*
