@@ -11,21 +11,21 @@ public class MovesBehaviour : MonoBehaviour
     public void makeMove()
     {
         Debug.Log("Make move");
-        Debug.Log(source);
         RestClient.Request(new RequestHelper
         {
             Uri = "https://ihc-chess-server.herokuapp.com/make_move",
             Method = "POST",
             Timeout = 10,
-            Params = new Dictionary<string, string> { { "game_id", "5dbf88ddb67efa00144cbf3d" }, { "player_id", "2" }, { "source_position", GameObject.Find("sourcetext").GetComponent<Text>().text },
+            Params = new Dictionary<string, string> { { "game_id", GlobalVars.player_current_game }, { "player_id", GlobalVars.player_id }, { "source_position", GameObject.Find("sourcetext").GetComponent<Text>().text },
                                                                                                                { "target_position", GameObject.Find("targettext").GetComponent<Text>().text} }
         });
     }
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("on start");
-        RestClient.GetArray<Move>("https://ihc-chess-server.herokuapp.com/list-moves/5dbf88ddb67efa00144cbf3d").Then(response => {
+        Debug.Log("Currently on Game Scene");
+        Debug.Log(GlobalVars.player_id);
+        RestClient.GetArray<Move>("https://ihc-chess-server.herokuapp.com/list-moves/"+GlobalVars.player_current_game).Then(response => {
             for (int i = 0; i < response.Length; i++)
             {
                 GameObject newitem = (GameObject)Instantiate(item);
@@ -45,7 +45,8 @@ public class MovesBehaviour : MonoBehaviour
 
     void update_moves()
     {
-        RestClient.GetArray<Move>("https://ihc-chess-server.herokuapp.com/list-moves/5dbf88ddb67efa00144cbf3d").Then(response => {
+        Debug.Log(" service to update moves -> player_id: " + GlobalVars.player_id + " game_id: " + GlobalVars.player_current_game);
+        RestClient.GetArray<Move>("https://ihc-chess-server.herokuapp.com/list-moves/"+GlobalVars.player_current_game).Then(response => {
             var panel1 = GameObject.Find("ContentMoves");
             if (response.Length > panel1.transform.childCount)
             {

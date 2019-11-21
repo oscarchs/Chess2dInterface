@@ -48,7 +48,7 @@ public class LobbyBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(" update in lobby -> player_id: " + GlobalVars.player_id + " game_id: " + GlobalVars.player_current_game);
     }
 
     public void enterGame(Text gameId)
@@ -60,9 +60,13 @@ public class LobbyBehavior : MonoBehaviour
             Uri = "https://ihc-chess-server.herokuapp.com/enter_game",
             Method = "POST",
             Timeout = 10,
-            Params = new Dictionary<string, string> { {"game_id",gameId.text }, {"player_id", GlobalUser.Instance.player_id} }
+            Params = new Dictionary<string, string> { {"game_id",gameId.text }, {"player_id",GlobalVars.player_id} }
 
-        }).Then( response => SceneManager.LoadScene("game"));
+        }).Then( response => 
+        {
+            GlobalVars.player_current_game = gameId.text;
+            SceneManager.LoadScene("game");
+        });
     }
 
     public void GoToMainMenu()

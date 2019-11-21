@@ -21,6 +21,7 @@ public class login : MonoBehaviour
 
         }).Then(response =>
         {
+            GlobalVars.player_id = response.id.ToString();
             //GlobalUser.Instance.player_id = response.id.ToString();
             SceneManager.LoadScene("lobby");
             

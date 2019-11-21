@@ -712,7 +712,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: AR Versus Game
+  m_Text: Collaborative Game
 --- !u!222 &1111490324
 CanvasRenderer:
   m_ObjectHideFlags: 0
