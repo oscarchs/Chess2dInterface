@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/game.unity
     guid: cdda0a21237b7b94bb5945ee1a41e207
+  - enabled: 1
+    path: Assets/login.unity
+    guid: a27edaf3d79a7464ea14a798961ee463
   m_configObjects: {}
