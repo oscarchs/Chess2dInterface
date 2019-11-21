@@ -69,6 +69,23 @@ public class LobbyBehavior : MonoBehaviour
         });
     }
 
+    public void exitGame()
+    {
+        Debug.Log(GlobalVars.player_name);
+        RestClient.Request(new RequestHelper
+        {
+            Uri = "https://ihc-chess-server.herokuapp.com/exit_game",
+            Method = "POST",
+            Timeout = 10,
+            Params = new Dictionary<string, string> { { "player_id", GlobalVars.player_id } }
+
+        }).Then(response =>
+        {
+            GlobalVars.player_current_game = "";
+            SceneManager.LoadScene("lobby");
+        });
+    }
+
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("mainmenu");
