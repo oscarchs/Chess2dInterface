@@ -3,22 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class MovesBehaviour : MonoBehaviour
 {
     public GameObject item;
     public string source;
+    public List<Tuple<string, string>> moves = new List<Tuple<string, string>>();
+
     public void makeMove()
     {
-        Debug.Log("Make move");
-        RestClient.Request(new RequestHelper
+        Debug.Log("Making moves from the 'Moves' list");
+        if ( moves.ToArray().Length >= 0)
         {
-            Uri = "https://ihc-chess-server.herokuapp.com/make_move",
-            Method = "POST",
-            Timeout = 10,
-            Params = new Dictionary<string, string> { { "game_id", GlobalVars.player_current_game }, { "player_id", GlobalVars.player_id }, { "source_position", GameObject.Find("sourcetext").GetComponent<Text>().text },
-                                                                                                               { "target_position", GameObject.Find("targettext").GetComponent<Text>().text} }
-        });
+            for(int i=0; i < moves.ToArray().Length; i++)
+            {
+                RestClient.Request(new RequestHelper
+                {
+                    Uri = "https://ihc-chess-server.herokuapp.com/make_move",
+                    Method = "POST",
+                    Timeout = 10,
+                    Params = new Dictionary<string, string> { { "game_id", GlobalVars.player_current_game }, { "player_id", GlobalVars.player_id },
+                                                                { "source_position", moves.ToArray()[i].Item1 },
+                                                                { "target_position", moves.ToArray()[i].Item2 } }
+                });
+            }
+            
+        }
+        
+    }
+
+    public void addMove()
+    {
+        moves.Add(Tuple.Create<string, string>(GameObject.Find("sourcetext").GetComponent<Text>().text, GameObject.Find("targettext").GetComponent<Text>().text));
+        for(int i=0; i < moves.ToArray().Length; i++)
+        {
+            Debug.Log(moves.ToArray()[i]);
+        }
     }
     // Start is called before the first frame update
     void Start()
